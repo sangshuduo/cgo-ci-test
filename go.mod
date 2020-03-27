@@ -1,4 +1,4 @@
-module cgo_ci_helloworld
+module github.com/sangshuduo/cgo_ci_helloworld
 
 go 1.13
 

@@ -28,52 +28,48 @@ language: go
 
 os:
   - linux
-  - osx
+
+addons:
+  apt:
+    packages:
+      - build-essential
+      - cmake
 
 go:
   - 1.13.x
 
 env: GO111MODULE=on
 
+before_install:
+  - |-
+    case $TRAVIS_OS_NAME in
+      linux)
+        export CURR_DIR=`pwd`
+        export TDENGINE_DIR=$HOME/TDengine
+        git clone --depth 1 https://github.com/taosdata/TDengine $TDENGINE_DIR
+        cd $TDENGINE_DIR
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+        make install
+        cd $CURR_DIR
+        ;;
+    esac
+
+install:
+  - mkdir -p $GOPATH/src/golang.org/x
+  - git clone --depth 1 https://github.com/golang/lint.git $GOPATH/src/golang.org/x/lint
+  - go get -u golang.org/x/lint/golint
+
 git:
   depth: 1
+
+script:
+  - golint ./...
+  - go test -v ./... -bench=. -cpu=1,2,4,16
+  - go build
 
 notifications:
   email:
     - sangshuduo@gmail.com
-
-#
-# Build Matrix
-#
-matrix:
-  - os: linux
-    before_script:
-      - git clone --depth 1 https://github.com/taosdata/TDengine
-      - cd TDengine
-      - mkdir build
-      - cd build
-      - cmake ..
-      - cmake --build .
-      - make install
-
-    addons:
-      apt:
-        packages:
-          - build-essential
-          - golint
-          - cmake
-    script:
-      - golint ./...
-      - go test -v ./... -bench=. -cpu=1,2,4,8
-      - go build
-
-  - os: osx
-    addons:
-      brew:
-        packages:
-          golint
-
-    script:
-      - golint ./...
-      - go test -v ./...
-
