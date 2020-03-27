@@ -1,4 +1,4 @@
-module cgo-i-test
+module cgo_ci_helloworld
 
 go 1.13
 
