@@ -67,6 +67,7 @@ git:
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./go.test.sh
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
@@ -75,8 +76,10 @@ script:
   - go test -v ./... -bench=. -cpu=1,2,4,16
   - go build
   - go test -coverprofile c.out ./...
+  - bash ./go.test.sh
 
 after_script:
+  - bash <(curl -s https://codecov.io/bash)
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
