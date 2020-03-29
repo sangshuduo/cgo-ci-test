@@ -24,6 +24,10 @@
 #
 # Configuration
 #
+env:
+  global:
+    - CC_TEST_REPORTER_ID=3c0470b62e9704d7b14467814cbe364a7750711cf3819fe2f72fd29b0eda7932
+
 language: go
 
 os:
@@ -65,10 +69,19 @@ install:
 git:
   depth: 1
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   - golint ./...
   - go test -v ./... -bench=. -cpu=1,2,4,16
   - go build
+  - go test -coverprofile c.out ./...
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   email:
