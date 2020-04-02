@@ -46,7 +46,7 @@ before_install:
       linux)
         export CURR_DIR=`pwd`
         export TDENGINE_DIR=$HOME/TDengine
-        git clone --depth 1 https://github.com/taosdata/TDengine $TDENGINE_DIR
+        git clone --depth 1 --branch=master https://github.com/taosdata/TDengine $TDENGINE_DIR
         cd $TDENGINE_DIR
         mkdir build
         cd build
