@@ -17,7 +17,7 @@ func Test_Division_Zero(t *testing.T) {
 	if _, e := Division(10, 0); e == nil {
 		t.Error("Should not go here.")
 	} else {
-		t.Log("Check zero correctlly.")
+		t.Log("Check zero correctly.")
 	}
 }
 
